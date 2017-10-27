@@ -1,0 +1,27 @@
+#Deployment Plugin Project File
+#Tue Oct 10 23:18:09 PDT 2017
+build.ant.name=<.>\\resources\\dp\\mqtt_sql_gateway_osgi_build.xml
+build.dp.file=<.>\\resources\\dp\\mqtt_sql_gateway_osgi.dp
+build.location=
+bundles.0.bundle_path=C\:\\Users\\Alex\\Desktop\\plugins\\org.eclipse.kura.alexsensors.mqtt_sql_gateway_osgi_1.0.0.201710102311.jar
+bundles.0.customizer=false
+bundles.0.headers.count=0
+bundles.0.missing=false
+bundles.0.name=bundles/org.eclipse.kura.alexsensors.mqtt_sql_gateway_osgi_1.0.0.201710102311.jar
+bundles.0.symbolic_name=org.eclipse.kura.alexsensors.mqtt_sql_gateway_osgi
+bundles.0.version=1.0.0.201710102311
+bundles.1.bundle_path=C\:\\Users\\Alex\\kura-playing-workspace\\target-definition\\common\\repository\\plugins\\mysql-connector-java-5.1.44-bin.jar
+bundles.1.customizer=false
+bundles.1.headers.count=0
+bundles.1.missing=false
+bundles.1.name=bundles/mysql-connector-java-5.1.44-bin.jar
+bundles.1.symbolic_name=com.mysql.jdbc
+bundles.1.version=5.1.44
+bundles.count=2
+certificates.count=0
+general.signbundles=false
+headers.other.headers=
+headers.symbolic.name=mqtt_sql_gateway_osgi
+headers.version=1.0.0
+resources.count=0
+

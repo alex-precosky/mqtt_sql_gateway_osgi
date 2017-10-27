@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<MetaData xmlns="http://www.osgi.org/xmlns/metatype/v1.2.0" localization="en_us">
+    <OCD id="org.eclipse.kura.alexsensors.mqtt_sql_gateway_osgi"
+        name="MQTT_SQL_Gateway"
+        description="This is a sample metatype file for a simple configurable component">
+
+        <AD id="mysql.hostname"
+            name="mysql.hostname"
+            type="String"
+            cardinality="0"
+            required="true"
+            default="mysql.host"
+            description="MySQL host"/>
+
+        <AD id="mysql.database"
+            name="mysql.database"
+            type="String"
+            String="0"
+            required="true"
+            default="mysql.database"
+            description="MySQL database name"/>
+            
+        <AD id="mysql.user"
+            name="mysql.user"
+            type="String"
+            String="0"
+            required="true"
+            default="mysql.user"
+            description="MySQL user"/>            
+
+        <AD id="mysql.password"
+            name="mysql.password"
+            type="Password"
+            String="0"
+            required="true"
+            default="mysql.password"
+            description="MySQL password"/>
+    </OCD>
+
+    <Designate pid="org.eclipse.kura.alexsensors.mqtt_sql_gateway_osgi">
+        <Object ocdref="org.eclipse.kura.alexsensors.mqtt_sql_gateway_osgi"/>
+    </Designate>
+</MetaData>

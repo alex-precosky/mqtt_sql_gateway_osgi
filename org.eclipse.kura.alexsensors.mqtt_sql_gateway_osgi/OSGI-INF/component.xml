@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" activate="activate" configuration-policy="require" deactivate="deactivate" immediate="true" modified="updated" name="org.eclipse.kura.alexsensors.mqtt_sql_gateway_osgi">
+	
+   <implementation class="org.eclipse.kura.alexsensors.mqtt_sql_gateway_osgi.MQTT_SQL_Gateway"/>
+   <service>
+      <provide interface="org.eclipse.kura.configuration.ConfigurableComponent"/>
+   </service>
+   
+   <reference name="CloudService"
+       policy="static"
+       bind="setCloudService"
+       unbind="unsetCloudService"
+       cardinality="1..1"
+       interface="org.eclipse.kura.cloud.CloudService"
+       target="(kura.service.pid=org.eclipse.kura.cloud.CloudService)"/>
+       
+     <reference name="CryptoService"
+       policy="static"
+       bind="setCryptoService"
+       unbind="unsetCryptoService"
+       cardinality="1..1"
+       interface="org.eclipse.kura.crypto.CryptoService"/>       
+   
+   <property name="service.pid" type="String" value="org.eclipse.kura.alexsensors.mqtt_sql_gateway_osgi"/>
+</scr:component>
