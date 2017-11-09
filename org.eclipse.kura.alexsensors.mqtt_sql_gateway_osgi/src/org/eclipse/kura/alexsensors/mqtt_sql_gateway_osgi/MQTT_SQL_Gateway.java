@@ -115,6 +115,7 @@ public class MQTT_SQL_Gateway implements ConfigurableComponent, CloudClientListe
     			m_cloudClient = m_cloudService.newCloudClient("alexsensors");	
  	   	    	this.m_cloudClient.addCloudClientListener(this);
  	   	    	doUpdate(properties);
+
  	   	    	m_cloudClient.subscribe(TEMPERATURE_TOPIC, 0);
  	   	    	m_cloudClient.subscribe(BAT_VOLTAGE_TOPIC, 0);
     		}
@@ -202,9 +203,7 @@ public class MQTT_SQL_Gateway implements ConfigurableComponent, CloudClientListe
     	// get time stamp in local time
         Timestamp timestamp = new Timestamp(System.currentTimeMillis());
 
-    	try {
-    		Connection my_connection = buildConnection();
-
+    	try (Connection my_connection = buildConnection()) {
     	    String qryStr = "INSERT INTO fridge (time, temperature, batteryVoltage) VALUES (?, ?, ?)";
     	    PreparedStatement st = my_connection.prepareStatement(qryStr);
     	    st.setTimestamp(1, timestamp);
@@ -214,9 +213,9 @@ public class MQTT_SQL_Gateway implements ConfigurableComponent, CloudClientListe
     	    st.executeUpdate();
     	    my_connection.close();
     	    s_logger.info("Inserted!");
-	    
-
-    	} catch (SQLException ex) {
+	   
+    	} 
+    	catch (SQLException ex) {
     		s_logger.error("SQLException while inserting: ", ex);
     	}
 
@@ -230,37 +229,37 @@ public class MQTT_SQL_Gateway implements ConfigurableComponent, CloudClientListe
 	  
 	    @Override
 	    public  void onMessagePublished(int messageId, String appTopic) {
-	        s_logger.info("Published message with ID: {} on application topic: {}", messageId, appTopic);
+	        s_logger.trace("Published message with ID: {} on application topic: {}", messageId, appTopic);
 	    }
 	    
 		   @Override
 		    public  void onControlMessageArrived(String deviceId, String appTopic, KuraPayload msg, int qos, boolean retain) {
-		        s_logger.info("Control message arrived on assetId: {} and semantic topic: {}", deviceId, appTopic);
+		        s_logger.trace("Control message arrived on assetId: {} and semantic topic: {}", deviceId, appTopic);
 		    }
 
 		   
 		    @Override
 		    public  void onMessageArrived(String deviceId, String appTopic, KuraPayload msg, int qos, boolean retain) {
-		        s_logger.info("Message arrived on assetId: {} and semantic topic: {}", deviceId, appTopic);
+		        s_logger.trace("Message arrived on assetId: {} and semantic topic: {}", deviceId, appTopic);
 		        
 		        
 		        if(appTopic.equals(TEMPERATURE_TOPIC))
 		        {
 		        
 		        	m_tempeature = Float.parseFloat( new String(msg.getBody()) );
-				    s_logger.info("Temperature received: {}", m_tempeature);
+				    s_logger.trace("Temperature received: {}", m_tempeature);
 		        }
 		            
 		        else if(appTopic.equals(BAT_VOLTAGE_TOPIC))
 		        {
 		        	m_battery_voltage = Float.parseFloat( new String(msg.getBody()) );
-				    s_logger.info("Battery voltage received: {}", m_battery_voltage);
+				    s_logger.trace("Battery voltage received: {}", m_battery_voltage);
 		        }
 		            
 
 		        if(m_tempeature != null && m_battery_voltage != null)
 		        {
-		            s_logger.info("Transmitting");
+		            s_logger.trace("Transmitting");
 		            do_transmit(m_tempeature, m_battery_voltage);
 		            
 		            m_tempeature = null;
@@ -276,7 +275,7 @@ public class MQTT_SQL_Gateway implements ConfigurableComponent, CloudClientListe
 			   
 			    @Override
 			    public  void onMessageConfirmed(int messageId, String appTopic) {
-			        s_logger.info("Confirmed message with ID: {} on application topic: {}", messageId, appTopic);
+			        s_logger.trace("Confirmed message with ID: {} on application topic: {}", messageId, appTopic);
 			    }			   
 		    
 }
