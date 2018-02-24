@@ -157,8 +157,6 @@ public class MQTT_SQL_Gateway implements ConfigurableComponent, CloudClientListe
     public void updated(Map<String, Object> properties) {
     	s_logger.info("Updating MQTT_SQL_Gateway...");
     	
-        this.m_properties = properties;
-        
         // log the new properties
         if(properties != null && !properties.isEmpty()) {
             Iterator<Entry<String, Object>> it = properties.entrySet().iterator();
