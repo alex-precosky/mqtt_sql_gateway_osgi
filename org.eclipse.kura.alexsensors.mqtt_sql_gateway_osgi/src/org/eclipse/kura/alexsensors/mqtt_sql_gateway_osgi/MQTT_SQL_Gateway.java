@@ -115,9 +115,6 @@ public class MQTT_SQL_Gateway implements ConfigurableComponent, CloudClientListe
     			m_cloudClient = m_cloudService.newCloudClient("alexsensors");	
  	   	    	this.m_cloudClient.addCloudClientListener(this);
  	   	    	doUpdate(properties);
-
- 	   	    	m_cloudClient.subscribe(TEMPERATURE_TOPIC, 0);
- 	   	    	m_cloudClient.subscribe(BAT_VOLTAGE_TOPIC, 0);
     		}
 			
 		} catch (Exception e) {
@@ -222,7 +219,14 @@ public class MQTT_SQL_Gateway implements ConfigurableComponent, CloudClientListe
 	
 	  @Override
 	    public  void onConnectionEstablished() {
-	        s_logger.info("Connection established");
+	        s_logger.info("Connection established. Subscribing to MQTT topics...");
+	    	try {
+	    		m_cloudClient.subscribe(TEMPERATURE_TOPIC, 0);
+	    		m_cloudClient.subscribe(BAT_VOLTAGE_TOPIC, 0);
+	    	}
+	    	catch (Exception ex) {
+	    		s_logger.error("Exception subscribing to MQTT topics: ", ex);
+	    	}
 	  }
 	  
 	    @Override
@@ -268,7 +272,7 @@ public class MQTT_SQL_Gateway implements ConfigurableComponent, CloudClientListe
 		    
 			   @Override
 			    public  void onConnectionLost() {
-			        s_logger.warn("Connection lost!");
+			        s_logger.error("Connection lost!");
 			    }
 			   
 			    @Override
