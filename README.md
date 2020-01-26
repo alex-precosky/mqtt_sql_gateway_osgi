@@ -14,9 +14,23 @@ It uses the Kura CloudService to subscribe to the MQTT topics that it listens on
 Kura is a Java framework for IoT gateways. https://www.eclipse.org/kura/index.php
 
 # Requirements
-- Eclipse Kura 3.1
+- Eclipse Kura 3.1+ (tested most recently with Kura 4.1)
+- Connector/J (JDBC driver for MySQL)
 - MQTT Server
 - Periodic sensor values coming from a serial port
+
+# Setup
+## Connector/J
+
+Download and extract Connector/J from the Oracle website. It will contain a .jar file which is what we need.
+
+In the 'target-definition' project in you Eclipse workspace, open the kura target, and add the location of the .jar file for Connector/J to the list of locations
+where plugins will be collected from.
+
+In the org.eclipse.kura.alexsensors.mqtt_sql_gateway_osgi Eclipse project under META-INF/MANIFEST.MF, the list of imported packages may need to be updated to match the version of Connector/J that was downloaded.
+
+Similarly, in resoruces/dp/mqtt_sql_gateway_osgi.dpp, the list of bundles included in the package may need to have the .jar file for Connector/J updated to match the one
+downloaded.
 
 # Building
 

@@ -96,7 +96,7 @@ public class MQTT_SQL_Gateway implements ConfigurableComponent, CloudClientListe
 	
 		decryptedPassword = new String(decryptedPasswordBytes);
 	
-		String ConnectionURL = "jdbc:mysql://" + hostname + ":3306/" + database + "?user=" + user + "&password=" + decryptedPassword;
+		String ConnectionURL = "jdbc:mysql://" + hostname + ":3306/" + database + "?user=" + user + "&password=" + decryptedPassword + "&serverTimezone=UTC";
 		
 		return DriverManager.getConnection(ConnectionURL);
 		
@@ -125,7 +125,7 @@ public class MQTT_SQL_Gateway implements ConfigurableComponent, CloudClientListe
     	
     	// Load the Mysql database driver
         try {
-            Class.forName("com.mysql.jdbc.Driver").newInstance();
+            Class.forName("com.mysql.cj.jdbc.Driver").newInstance();
         } catch (Exception ex) {
             s_logger.error("Error loading jdbc driver", ex);
         }
