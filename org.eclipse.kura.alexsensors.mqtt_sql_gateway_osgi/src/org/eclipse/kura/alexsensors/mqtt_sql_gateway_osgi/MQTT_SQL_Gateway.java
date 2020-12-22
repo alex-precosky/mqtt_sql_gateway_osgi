@@ -15,8 +15,6 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.sql.PreparedStatement;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 import org.osgi.service.component.ComponentContext;
 import org.osgi.service.component.ComponentException;
@@ -26,15 +24,15 @@ import org.eclipse.kura.configuration.ConfigurableComponent;
 import org.eclipse.kura.message.KuraPayload;
 import org.eclipse.kura.crypto.CryptoService;
 
-import org.eclipse.kura.configuration.Password;
-
 public class MQTT_SQL_Gateway implements ConfigurableComponent, CloudClientListener {
 
     private static final Logger s_logger = LoggerFactory.getLogger(MQTT_SQL_Gateway.class);
-    private static final String APP_ID = "org.eclipse.kura.alexsensors.MQTT_SQL_Gateway";
 
+    private static final String APP_ID = "org.eclipse.kura.alexsensors.MQTT_SQL_Gateway";
     private static final String MQTT_APP_ID = "alexsensors";
 
+    /* Component property names. These are the configurable properties that can
+     * be set up in the Kura UI */
     private static final String DB_HOSTNAME_PROP_NAME = "mysql.hostname";
     private static final String DB_DATABASE_PROP_NAME = "mysql.database";
     private static final String DB_USER_PROP_NAME = "mysql.user";
@@ -42,15 +40,16 @@ public class MQTT_SQL_Gateway implements ConfigurableComponent, CloudClientListe
 
     private Map<String, Object> m_properties;
 
+    // Kura objects for interacting with services provided by Kura
     private CloudService m_cloudService;
     private CloudClient m_cloudClient;
-
     private CryptoService m_cryptoService;
 
     // Collect one each of a temperature and a voltage then send them to the MySQL server
     private Float m_tempeature = null;
     private Float m_battery_voltage = null;
 
+    // MQTT topic names that are subscribed to
     private static final String TEMPERATURE_TOPIC = "fridge/temperature";
     private static final String BAT_VOLTAGE_TOPIC = "fridge/batVoltage";
 
@@ -98,13 +97,13 @@ public class MQTT_SQL_Gateway implements ConfigurableComponent, CloudClientListe
     }
 
     protected void activate(ComponentContext componentContext, Map<String, Object> properties) {
-        s_logger.info("Starting");
+        s_logger.info("Starting bundle " + APP_ID);
         m_properties = new HashMap<String, Object>();
 
         try {
             s_logger.info("Getting CloudClient for {}...", APP_ID);
             if (this.m_cloudService != null ) {
-                m_cloudClient = m_cloudService.newCloudClient("alexsensors");
+                m_cloudClient = m_cloudService.newCloudClient(MQTT_APP_ID);
                 this.m_cloudClient.addCloudClientListener(this);
                 doUpdate(properties);
             }
@@ -113,19 +112,19 @@ public class MQTT_SQL_Gateway implements ConfigurableComponent, CloudClientListe
             throw new ComponentException(e);
         }
 
-        // Load the Mysql database driver
+        /* Load the Mysql database driver and create the MySQL database
+         * connection to test connectivity on startup, but close the connection
+         * right away */
         try {
             Class.forName("com.mysql.cj.jdbc.Driver").newInstance();
         } catch (Exception ex) {
             s_logger.error("Error loading jdbc driver", ex);
         }
 
-        // Create the Mysql dataase connection to test connectivity on startup, but close the connection right away
         try {
             Connection my_connection = buildConnection();
             my_connection.close();
         } catch (SQLException ex) {
-            // handle any errors
             s_logger.error("SQLException: ", ex);
         }
 
@@ -159,7 +158,7 @@ public class MQTT_SQL_Gateway implements ConfigurableComponent, CloudClientListe
     private void doUpdate(Map<String, Object> properties) {
         try {
             for (String s : properties.keySet()) {
-                s_logger.info("Update - "+s+": "+properties.get(s));
+                s_logger.info("Update - " + s + ": "+properties.get(s));
             }
 
             // store the properties
@@ -193,7 +192,7 @@ public class MQTT_SQL_Gateway implements ConfigurableComponent, CloudClientListe
 
     @Override
     public void onConnectionEstablished() {
-        s_logger.info("Connection established. Subscribing to MQTT topics...");
+        s_logger.info("Connection to cloud client established. Subscribing to MQTT topics...");
         try {
             m_cloudClient.subscribe(TEMPERATURE_TOPIC, 0);
             m_cloudClient.subscribe(BAT_VOLTAGE_TOPIC, 0);
@@ -226,7 +225,7 @@ public class MQTT_SQL_Gateway implements ConfigurableComponent, CloudClientListe
         }
 
         if (m_tempeature != null && m_battery_voltage != null) {
-            s_logger.trace("Transmitting");
+            s_logger.trace("Transmitting to MySQL server");
             do_transmit(m_tempeature, m_battery_voltage);
 
             m_tempeature = null;
@@ -236,7 +235,7 @@ public class MQTT_SQL_Gateway implements ConfigurableComponent, CloudClientListe
 
     @Override
     public void onConnectionLost() {
-        s_logger.error("Connection lost!");
+        s_logger.error("Connection to cloud client lost!");
     }
 
     @Override
