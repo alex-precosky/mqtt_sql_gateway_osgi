@@ -4,12 +4,12 @@ Bundle-Name: Mqtt_sql_gateway_osgi
 Bundle-SymbolicName: org.eclipse.kura.alexsensors.mqtt_sql_gateway_osgi
 Bundle-Version: 1.0.0.qualifier
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
-Import-Package: com.mysql.cj.jdbc;version="8.0.19",
- com.mysql.cj.jdbc.exceptions;version="8.0.19",
- org.eclipse.kura.cloud;version="1.1.0",
+Import-Package:  org.eclipse.kura.cloud;version="1.1.0",
  org.eclipse.kura.configuration;version="1.1.2",
  org.eclipse.kura.crypto;version="1.2.2",
  org.eclipse.kura.message;version="1.1.1",
  org.osgi.service.component;version="1.2.2",
  org.slf4j;version="1.7.21"
+Bundle-Classpath: .,
+  target/dependency/mysql-connector-java-8.0.19.jar
 Service-Component: OSGI-INF/component.xml

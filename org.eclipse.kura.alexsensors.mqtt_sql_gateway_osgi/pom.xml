@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>com.precosky.app.MQTT_SQL_Gateway</groupId>
+  <artifactId>org.eclipse.kura.alexsensors.mqtt_sql_gateway_osgi</artifactId>
+  <packaging>eclipse-plugin</packaging>
+  <version>1.0.0-SNAPSHOT</version>
+
+  <!-- The Kura user workspace archive must be present here. Download one from
+       https://www.eclipse.org/kura/downloads.php -->
+  <properties>
+    <kura.user.worksapce>${user.home}/Downloads/user_workspace_archive_4.1.1</kura.user.worksapce>
+  </properties>
+
+  <repositories>
+    <repository>
+      <id>p2-repo</id>
+      <layout>p2</layout>
+      <url>file:///${kura.user.worksapce}/target-definition/equinox_3.12.50/repository/</url>
+    </repository>
+
+    <repository>
+      <id>p2-repo-common</id>
+      <layout>p2</layout>
+      <url>file:///${kura.user.worksapce}/target-definition/common/repository/</url>
+    </repository>
+  </repositories>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.eclipse.tycho</groupId>
+        <artifactId>tycho-maven-plugin</artifactId>
+        <version>1.1.0</version>
+        <extensions>true</extensions>
+      </plugin>
+      <plugin>
+        <groupId>de.dentrassi.maven</groupId>
+        <artifactId>osgi-dp</artifactId>
+        <version>0.4.0</version>
+        <executions>
+          <execution>
+            <goals>
+              <goal>build</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+
+      <plugin>
+        <!-- Copy non-Ecipse plugins to target/dependency so that may be referenced 
+             for runtime use. -->
+        <artifactId>maven-dependency-plugin</artifactId>
+        <version>2.1</version>
+        <executions>
+          <execution>
+            <id>copy-dependencies</id>
+            <goals>
+              <goal>copy-dependencies</goal>
+            </goals>
+          </execution>
+          <execution>
+            <id>classpath</id>
+            <goals>
+              <goal>build-classpath</goal>
+            </goals>
+            <configuration>
+              <fileSeparator>/</fileSeparator>
+              <prefix>target/dependency</prefix>
+              <outputFile>${project.build.directory}/classPath.txt
+              </outputFile>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+
+
+    </plugins>
+  </build>
+
+  <dependencies>
+
+    <!-- <dependency> -->
+    <!--       <groupId>org.slf4j</groupId> -->
+    <!--       <artifactId>jcl-over-slf4j</artifactId> -->
+    <!--       <version>1.7.21</version> -->
+    <!--     </dependency> -->
+
+    <!--     <dependency> -->
+    <!--       <groupId>org.eclipse.kura</groupId> -->
+    <!--       <artifactId>org.eclipse.kura.api</artifactId> -->
+    <!--       <version>1.1.0</version> -->
+    <!--       <scope>provided</scope> -->
+    <!--     </dependency> -->
+
+    <!--     <dependency> -->
+    <!--       <groupId>org.eclipse.kura</groupId> -->
+    <!--       <artifactId>org.eclipse.kura.core.cloud</artifactId> -->
+    <!--       <version>1.1.0</version> -->
+    <!--     </dependency> -->
+
+    <dependency>
+      <groupId>mysql</groupId>
+      <artifactId>mysql-connector-java</artifactId>
+      <version>8.0.19</version>
+    </dependency>
+
+    <!--     <dependency> -->
+    <!--       <groupId>org.osgi</groupId> -->
+    <!--       <artifactId>org.osgi.core</artifactId> -->
+    <!--       <version>6.0.0</version> -->
+    <!--       <scope>provided</scope> -->
+    <!--     </dependency> -->
+
+    <!-- <dependency> -->
+    <!--     <groupId>org.osgi</groupId> -->
+    <!--     <artifactId>org.osgi.service.component.annotations</artifactId> -->
+    <!--     <version>1.3.0</version> -->
+    <!--     <scope>provided</scope> -->
+    <!--   </dependency> -->
+    <!--   <dependency> -->
+    <!--     <groupId>org.osgi</groupId> -->
+    <!--     <artifactId>org.osgi.service.metatype.annotations</artifactId> -->
+    <!--     <version>1.3.0</version> -->
+    <!--     <scope>provided</scope> -->
+    <!--   </dependency> -->
+
+    <!--     <dependency> -->
+    <!--       <groupId>org.osgi</groupId> -->
+    <!--       <artifactId>org.osgi.service.component</artifactId> -->
+    <!--       <version>1.3.0</version> -->
+    <!--       <scope>provided</scope> -->
+    <!-- </dependency> -->
+
+
+  </dependencies>
+</project>

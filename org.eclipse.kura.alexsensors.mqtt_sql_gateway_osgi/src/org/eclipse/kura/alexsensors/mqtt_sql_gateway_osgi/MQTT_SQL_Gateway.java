@@ -26,7 +26,6 @@ import org.eclipse.kura.configuration.ConfigurableComponent;
 import org.eclipse.kura.message.KuraPayload;
 import org.eclipse.kura.crypto.CryptoService;
 
-import org.eclipse.kura.KuraException;
 import org.eclipse.kura.configuration.Password;
 
 public class MQTT_SQL_Gateway implements ConfigurableComponent, CloudClientListener {
